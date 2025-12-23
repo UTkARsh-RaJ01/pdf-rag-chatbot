@@ -83,11 +83,11 @@ class RAGService:
         else:
             from langchain_huggingface import HuggingFaceEmbeddings
             self.embeddings = HuggingFaceEmbeddings(
-                model_name="sentence-transformers/all-mpnet-base-v2",
+                model_name="sentence-transformers/all-MiniLM-L6-v2",
                 model_kwargs={'device': 'cpu'},
                 encode_kwargs={'normalize_embeddings': True}
             )
-            logger.info("Using HuggingFace Embeddings (all-mpnet-base-v2, 768 dims)")
+            logger.info("Using HuggingFace Embeddings (all-MiniLM-L6-v2, 384 dims)")
     
     def _init_llm(self):
         self.llm = ChatGoogleGenerativeAI(

@@ -104,7 +104,7 @@ git push -u origin main
 
 Create an index at https://app.pinecone.io with:
 - **Name**: `pdf-rag-index`
-- **Dimension**: `768`
+- **Dimension**: `384`
 - **Metric**: `cosine`
 
 ---

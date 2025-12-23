@@ -12,9 +12,8 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Pre-download HuggingFace model during build for faster cold starts on Railway
-# This downloads the all-mpnet-base-v2 model (~420MB) into the image
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-mpnet-base-v2')"
+# Pre-download HuggingFace model during build (all-MiniLM-L6-v2, ~80MB, 384 dims)
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
 
 # Copy application code
 COPY . .
