@@ -1,6 +1,6 @@
 # PDF RAG Chatbot
 
-A production-ready RAG (Retrieval-Augmented Generation) chatbot for querying PDF documents.
+A production-ready RAG chatbot for querying PDF documents.
 
 ## Features
 
@@ -8,7 +8,7 @@ A production-ready RAG (Retrieval-Augmented Generation) chatbot for querying PDF
 - 🤖 Chat with AI about your documents
 - 🔄 Switchable embeddings (HuggingFace local or Google API)
 - 🎨 Beautiful dark mode UI
-- 🚀 Docker & Railway ready
+- 🚀 Docker & Render ready
 
 ## Tech Stack
 
@@ -20,75 +20,72 @@ A production-ready RAG (Retrieval-Augmented Generation) chatbot for querying PDF
 
 ---
 
-## Quick Start (Local Development)
+## Quick Start (Local)
 
-### 1. Setup Backend
+### Backend
 ```bash
 cd backend
 pip install -r requirements.txt
-
-# Create .env file with:
-# PINECONE_API_KEY=your_key
-# PINECONE_INDEX_NAME=pdf-rag-index
-# GOOGLE_API_KEY=your_key
-
+# Create .env with PINECONE_API_KEY, PINECONE_INDEX_NAME, GOOGLE_API_KEY
 uvicorn main:app --reload --port 8000
 ```
 
-### 2. Setup Frontend
+### Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### 3. Open http://localhost:3000
+Open http://localhost:3000
 
 ---
 
-## Docker Deployment
-
-### Local Docker Compose
-```bash
-# Create .env file in root with your keys
-docker-compose up --build
-```
-
----
-
-## Railway Deployment
+## Render Deployment (Free)
 
 ### Prerequisites
-- Railway account (https://railway.app)
-- GitHub repository with this code
+- GitHub account with this code pushed
+- Render account (https://render.com)
 - Pinecone index (dimension: 768)
 
-### Step 1: Deploy Backend
+### Step 1: Push to GitHub
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/YOUR_USERNAME/pdf-rag-chatbot.git
+git push -u origin main
+```
 
-1. Go to Railway → New Project → Deploy from GitHub
-2. Select your repository
-3. Set **Root Directory**: `backend`
-4. Add Environment Variables:
-   - `PINECONE_API_KEY` - Your Pinecone key
-   - `PINECONE_INDEX_NAME` - `pdf-rag-index`
-   - `GOOGLE_API_KEY` - Your Google Gemini key
-5. Deploy → Get public URL (e.g., `https://backend-xxx.railway.app`)
+### Step 2: Deploy Backend
 
-### Step 2: Deploy Frontend
+1. Go to https://dashboard.render.com
+2. Click **New** → **Web Service**
+3. Connect your GitHub repository
+4. Configure:
+   - **Name**: `pdf-rag-backend`
+   - **Root Directory**: `backend`
+   - **Runtime**: `Docker`
+5. Add Environment Variables:
+   - `PINECONE_API_KEY` = your key
+   - `PINECONE_INDEX_NAME` = `pdf-rag-index`
+   - `GOOGLE_API_KEY` = your key
+6. Click **Create Web Service**
+7. Wait for deploy → Copy URL (e.g., `https://pdf-rag-backend.onrender.com`)
 
-1. Create new service in same project
-2. Select your repository
-3. Set **Root Directory**: `frontend`
-4. Add Build Arguments:
-   - `VITE_API_URL` - Your backend URL from Step 1
-5. Deploy → Generate domain
+### Step 3: Deploy Frontend
 
-### HuggingFace on Railway
-
-✅ **Works automatically!** The Docker image pre-downloads the HuggingFace model during build, so:
-- No API key needed
-- Fast cold starts
-- Runs completely in the Railway container
+1. Click **New** → **Static Site**
+2. Connect same repository
+3. Configure:
+   - **Name**: `pdf-rag-frontend`
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `dist`
+4. Add Environment Variable:
+   - `VITE_API_URL` = your backend URL from Step 2
+5. Click **Create Static Site**
+6. Your app is live! 🎉
 
 ---
 
@@ -111,6 +108,12 @@ Create an index at https://app.pinecone.io with:
 - **Metric**: `cosine`
 
 ---
+
+## Notes
+
+- Backend uses HuggingFace embeddings by default (no API quota issues)
+- HuggingFace model is pre-downloaded in Docker image (~420MB)
+- First request after cold start may take ~30s
 
 ## License
 
